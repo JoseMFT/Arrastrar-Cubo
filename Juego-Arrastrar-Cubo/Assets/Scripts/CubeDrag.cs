@@ -5,14 +5,7 @@ using UnityEngine;
 public class CubeDrag : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void desplazar (Vector3 mousePos) {
+        this.Transform.position (mousePos.x / Screen.width, 0f, mousePos.y / Screen.height);
     }
 }
