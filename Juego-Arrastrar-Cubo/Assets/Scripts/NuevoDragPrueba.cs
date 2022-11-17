@@ -127,7 +127,7 @@ public class NuevoDragPrueba: MonoBehaviour {
             Vector3 originalCubeSize = cube.transform.localScale;
 
             if (Physics.Raycast (moveRay, out hitInfo) == true) {
-                cube.transform.localScale = cube.transform.localScale + (mousePos - cube.transform.position) /;
+                cube.transform.localScale = cube.transform.localScale + (mousePos - cube.transform.position) / (Screen.width / Screen.height);
             }
             cube.SetActive (true);
 
