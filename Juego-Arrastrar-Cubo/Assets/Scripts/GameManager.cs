@@ -5,11 +5,11 @@ using TMPro;
 
 public class GameManager: MonoBehaviour {
 
-    bool floating = false; 
+    bool floating = false;
 
     void Update () {
         // Si el número de veces clicado en pantalla es mayor o igual que uno Y se ha dejado de pulsar el clic izquierdo, o si se está pulsando el botón:
-        //if (((Input.touchCount >= 1 && Input.GetTouch (0).phase == TouchPhase.Began) || (Input.GetMouseButtonDown (0)))) { // (0 = botón izq., 1 = botón cent., 2= botón der.)
+        //if (((Input.touchCount >= 1 && Input.GetTouch (0).phase == TouchPhase.Ended) || (Input.GetMouseButtonDown (0)))) { // (0 = botón izq., 1 = botón cent., 2= botón der.)
         if (Input.GetMouseButton (0)) {
             clicking ();
         }
@@ -38,10 +38,10 @@ public class GameManager: MonoBehaviour {
                                     posCubo.position = hitInfo.point + new Vector3 (0f, 1f, -1f);
                                 }
                             }
-                        } 
-                    }                    
+                        }
+                    }
                 }
             }
         }
-    }    
+    }
 }
