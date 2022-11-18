@@ -4,14 +4,14 @@ using UnityEngine;
 using TMPro;
 
 public class NuevoDragPrueba: MonoBehaviour {
-    public GameObject cube, textUI;
+    public GameObject cube; //textUI;
     public CursorMode cursorMode;
     public Texture2D cursorNormal, cursorAgarrar;
     bool estadoSeleccion = false;
-    Vector3 originalScale, textSize;
+    Vector3 originalScale; //textSize;
     int accionCubo = 0;
 
-    public enum stateSelector {
+    public enum StateSelector {
         Idle,
         ObjectSelection,
         Move,
@@ -20,41 +20,41 @@ public class NuevoDragPrueba: MonoBehaviour {
         Release,
     }
     [SerializeField]
-    stateSelector currentState = stateSelector.Idle;
+    StateSelector currentState = StateSelector.Idle;
 
     [SerializeField]
     TextMeshProUGUI mensajeUI, mensajeSeleccion, mensajeMoverORotar;
     // Update is called once per frame
 
-    void Start () {
-        textSize = textUI.transform.localScale;
-    }
+    /*void Start () {
+        //textSize = textUI.transform.localScale;
+    }*/
 
     void Update () {
 
         switch (currentState) {
-            case stateSelector.ObjectSelection:
+            case StateSelector.ObjectSelection:
                 DetectCube ();
                 break;
 
-            case stateSelector.Move:
+            case StateSelector.Move:
                 MoveCube ();
                 break;
 
-            case stateSelector.Release:
+            case StateSelector.Release:
                 ReleaseCube ();
                 break;
 
-            case stateSelector.Idle:
+            case StateSelector.Idle:
                 mensajeSeleccion.text = "You cannot grab";
-                textUI.SetActive (false);
+                //textUI.SetActive (false);
                 break;
 
-            case stateSelector.Rotate:
+            case StateSelector.Rotate:
                 RotateCube ();
                 break;
 
-            case stateSelector.Scale:
+            case StateSelector.Scale:
                 ScaleCube ();
                 break;
         }
@@ -74,11 +74,11 @@ public class NuevoDragPrueba: MonoBehaviour {
 
                     if (Input.GetMouseButtonUp (0)) {
                         if (accionCubo == 1) {
-                            currentState = stateSelector.Move;
+                            currentState = StateSelector.Move;
                         } else if (accionCubo == 2) {
-                            currentState = stateSelector.Rotate;
+                            currentState = StateSelector.Rotate;
                         } else if (accionCubo == 3) {
-                            currentState = stateSelector.Scale;
+                            currentState = StateSelector.Scale;
                         }
                     }
                 }
@@ -98,7 +98,7 @@ public class NuevoDragPrueba: MonoBehaviour {
             cube.SetActive (true);
 
             if (Input.GetMouseButtonUp (0)) {
-                currentState = stateSelector.Release;
+                currentState = StateSelector.Release;
             }
         }
 
@@ -115,7 +115,7 @@ public class NuevoDragPrueba: MonoBehaviour {
             cube.SetActive (true);
 
             if (Input.GetMouseButtonUp (0)) {
-                currentState = stateSelector.Release;
+                currentState = StateSelector.Release;
             }
         }
 
@@ -127,12 +127,12 @@ public class NuevoDragPrueba: MonoBehaviour {
             Vector3 originalCubeSize = cube.transform.localScale;
 
             if (Physics.Raycast (moveRay, out hitInfo) == true) {
-                cube.transform.localScale = cube.transform.localScale + (mousePos - cube.transform.position) / (Screen.width / Screen.height);
+                cube.transform.localScale = cube.transform.localScale + (mousePos - cube.transform.position) / (Screen.width * Screen.height);
             }
             cube.SetActive (true);
 
             if (Input.GetMouseButtonUp (0)) {
-                currentState = stateSelector.Release;
+                currentState = StateSelector.Release;
             }
         }
     }
@@ -141,7 +141,7 @@ public class NuevoDragPrueba: MonoBehaviour {
         LeanTween.scale (cube, originalScale, 0.75f).setEaseOutCubic ();
         cube = null;
         //InitialUISettings ();
-        currentState = stateSelector.ObjectSelection;
+        currentState = StateSelector.ObjectSelection;
     }
     /*void InitialUISettings () {
         Cursor.SetCursor (cursorNormal, Vector2.zero, cursorMode);
@@ -162,9 +162,9 @@ public class NuevoDragPrueba: MonoBehaviour {
         estadoSeleccion = !estadoSeleccion;
 
         if (estadoSeleccion == true) {
-            currentState = stateSelector.ObjectSelection;
+            currentState = StateSelector.ObjectSelection;
         } else if (estadoSeleccion == false) {
-            currentState = stateSelector.Idle;
+            currentState = StateSelector.Idle;
         }
     }
 
