@@ -24,6 +24,7 @@ public class NuevoDragPrueba: MonoBehaviour {
         Scale,
         Rotate,
         Release,
+        WaitAfterCreate,
     }
 
     [SerializeField]
@@ -58,26 +59,32 @@ public class NuevoDragPrueba: MonoBehaviour {
             case StateSelector.Scale:
                 ScaleCube ();
                 break;
+
+            case StateSelector.WaitAfterCreate:
+                currentState = StateSelector.Move;
+                break;
         }
 
         void DetectCube () {
             Ray detectRay = Camera.main.ScreenPointToRay (mousePos);
             RaycastHit hitInfo;
-            //mensajeSeleccion.text = "You can grab";
 
             if (Physics.Raycast (detectRay, out hitInfo) == true) {
 
-                if (hitInfo.collider.tag.Equals ("Player")) {
-                    cube = hitInfo.collider.gameObject;
-                    originalScale = cube.transform.localScale;
+                if (create == false) {
 
-                    if (Input.GetMouseButtonUp (0)) {
-                        if (accionCubo == 1) {
-                            currentState = StateSelector.Move;
-                        } else if (accionCubo == 2) {
-                            currentState = StateSelector.Rotate;
-                        } else if (accionCubo == 3) {
-                            currentState = StateSelector.Scale;
+                    if (hitInfo.collider.tag.Equals ("Player")) {
+                        cube = hitInfo.collider.gameObject;
+                        originalScale = cube.transform.localScale;
+
+                        if (Input.GetMouseButtonUp (0)) {
+                            if (accionCubo == 1) {
+                                currentState = StateSelector.Move;
+                            } else if (accionCubo == 2) {
+                                currentState = StateSelector.Rotate;
+                            } else if (accionCubo == 3) {
+                                currentState = StateSelector.Scale;
+                            }
                         }
                     }
                 }
@@ -122,38 +129,38 @@ public class NuevoDragPrueba: MonoBehaviour {
 
 
         void ReleaseCube () {
-            LeanTween.cancel (cube);
             LeanTween.scale (cube, originalScale, 0.75f).setEaseOutCubic ();
             cube = null;
             currentState = StateSelector.ObjectSelection;
         }
-        /*public void EnableSelection () {
-            estadoSeleccion = !estadoSeleccion;
-
-            if (estadoSeleccion == true) {
-                currentState = StateSelector.ObjectSelection;
-            } else if (estadoSeleccion == false) {
-                currentState = StateSelector.Idle;
-            }
-        }*/
     }
     public void ClickedCreate (GameObject CreatedObject) {
         create = !create;
 
         if (create == true) {
             Instantiate (CreatedObject, Vector3.zero, Quaternion.identity);
-            currentState = StateSelector.Move;
+            cube = CreatedObject;
+            cube.GetComponent<MeshRenderer> ().material.color = Random.ColorHSV (); // EL PARENTESIS PREMITE CAMBIAR LOS VALORES MAIXMOS Y MINIMOS D ELOS COLOERS DEL OBJETO INSTANCIADO
+            currentState = StateSelector.WaitAfterCreate;
         }
 
     }
 
     public void ClickedEscalar () {
-        accionCubo = 3;
+        if (create == false) {
+            accionCubo = 3;
+        }
     }
     public void ClickedRotar () {
-        accionCubo = 2;
+        if (create == false) {
+            accionCubo = 2;
+        }
     }
     public void ClickedMover () {
-        accionCubo = 1;
+        if (create == false) {
+            accionCubo = 1;
+        }
     }
 }
+
+//
