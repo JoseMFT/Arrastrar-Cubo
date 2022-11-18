@@ -7,8 +7,8 @@ public class NuevoDragPrueba: MonoBehaviour {
     public GameObject cube;
     public CursorMode cursorMode;
     public Texture2D cursorNormal, cursorAgarrar;
+    public bool create = false;
     //bool estadoSeleccion = false;
-    public bool create = false, moving = false;
     Vector3 originalScale;
     int accionCubo = 0;
 
@@ -60,133 +60,62 @@ public class NuevoDragPrueba: MonoBehaviour {
                 break;
         }
 
-        if (create == true) {
-            textButton1.text = "Cubo Dorado";
-            textButton2.text = "Cubo Azul";
-            textButton3.text = "Esfera Rosa";
-            textButton4.text = "Cancelar";
-
-        } else if (create == false) {
-            textButton1.text = "Mover";
-            textButton2.text = "Escalar";
-            textButton3.text = "Rotar";
-            textButton4.text = "Crear";
-        }
-
         void DetectCube () {
-            if (create == false) {
-                Ray detectRay = Camera.main.ScreenPointToRay (mousePos);
-                RaycastHit hitInfo;
-                //mensajeSeleccion.text = "You can grab";
+            Ray detectRay = Camera.main.ScreenPointToRay (mousePos);
+            RaycastHit hitInfo;
+            //mensajeSeleccion.text = "You can grab";
 
-                if (Physics.Raycast (detectRay, out hitInfo) == true) {
+            if (Physics.Raycast (detectRay, out hitInfo) == true) {
 
-                    if (hitInfo.collider.tag.Equals ("Player")) {
-                        cube = hitInfo.collider.gameObject;
-                        originalScale = cube.transform.localScale;
+                if (hitInfo.collider.tag.Equals ("Player")) {
+                    cube = hitInfo.collider.gameObject;
+                    originalScale = cube.transform.localScale;
 
-                        if (Input.GetMouseButtonUp (0)) {
-                            if (accionCubo == 1) {
-                                currentState = StateSelector.Move;
-                            } else if (accionCubo == 2) {
-                                currentState = StateSelector.Rotate;
-                            } else if (accionCubo == 3) {
-                                currentState = StateSelector.Scale;
-                            }
+                    if (Input.GetMouseButtonUp (0)) {
+                        if (accionCubo == 1) {
+                            currentState = StateSelector.Move;
+                        } else if (accionCubo == 2) {
+                            currentState = StateSelector.Rotate;
+                        } else if (accionCubo == 3) {
+                            currentState = StateSelector.Scale;
                         }
                     }
-                }
-
-            } else if (create == true) {
-                if (accionCubo == 1) {
-                    currentState = StateSelector.Move;
-                } else if (accionCubo == 2) {
-                    currentState = StateSelector.Rotate;
-                } else if (accionCubo == 3) {
-                    currentState = StateSelector.Scale;
                 }
             }
         }
 
         void MoveCube () {
-            if (create == false) {
-                Ray moveRay = Camera.main.ScreenPointToRay (mousePos);
-                RaycastHit hitInfo;
-                cube.SetActive (false);
+            Ray moveRay = Camera.main.ScreenPointToRay (mousePos);
+            RaycastHit hitInfo;
+            cube.SetActive (false);
 
-                if (Physics.Raycast (moveRay, out hitInfo) == true) {
-                    cube.transform.position = hitInfo.point + Vector3.up * cube.transform.localScale.y / 2f;
-                }
-                cube.SetActive (true);
+            if (Physics.Raycast (moveRay, out hitInfo) == true) {
+                cube.transform.position = hitInfo.point + Vector3.up * cube.transform.localScale.y / 2f;
+            }
+            cube.SetActive (true);
 
-                if (Input.GetMouseButtonUp (0)) {
-                    currentState = StateSelector.Release;
-                }
-
-            } else if (create == true && moving == false) {
-                accionCubo = 1;
-                cube = Instantiate (prefabGoldenCube);
-                create = false;
-                currentState = StateSelector.Move;
-
-            } else if (create == true && moving == true) {
-                if (Input.GetMouseButtonUp (0)) {
-                    cube = null;
-                    create = false;
-                    moving = false;
-                }
+            if (Input.GetMouseButtonUp (0)) {
+                currentState = StateSelector.Release;
             }
         }
 
 
         void RotateCube () {
-            if (create == false) {
-                Vector2 mouseDelta = mousePos - (Vector2) Input.mousePosition;
-                cube.transform.Rotate (mouseDelta.y, mouseDelta.x, 0f);
-                mousePos = Input.mousePosition;
+            Vector2 mouseDelta = mousePos - (Vector2) Input.mousePosition;
+            cube.transform.Rotate (mouseDelta.y, mouseDelta.x, 0f);
+            mousePos = Input.mousePosition;
 
-                if (Input.GetMouseButtonUp (0)) {
-                    cube.GetComponent<Rigidbody> ().isKinematic = false;
-                    currentState = StateSelector.Release;
-                }
-
-            } else if (create == true && moving == false) {
-                accionCubo = 1;
-                cube = Instantiate (prefabBlueCylinder);
-                create = false;
-                currentState = StateSelector.Move;
-                moving = true;
-
-            } else if (create == true && moving == true) {
-                if (Input.GetMouseButtonUp (0)) {
-                    cube = null;
-                    create = false;
-                    moving = false;
-                }
+            if (Input.GetMouseButtonUp (0)) {
+                cube.GetComponent<Rigidbody> ().isKinematic = false;
+                currentState = StateSelector.Release;
             }
         }
 
         void ScaleCube () {
-            if (create == false) {
-                cube.transform.localScale += Vector3.one * Input.mouseScrollDelta.y;
+            cube.transform.localScale += Vector3.one * Input.mouseScrollDelta.y;
 
-                if (Input.GetMouseButtonUp (0)) {
-                    currentState = StateSelector.Release;
-                }
-
-            } else if (create == true && moving == false) {
-                accionCubo = 1;
-                cube = Instantiate (prefabPinkSphere);
-                create = false;
-                currentState = StateSelector.Move;
-
-            } else if (create == true && moving == true) {
-
-                if (Input.GetMouseButtonUp (0)) {
-                    cube = null;
-                    create = false;
-                    moving = false;
-                }
+            if (Input.GetMouseButtonUp (0)) {
+                currentState = StateSelector.Release;
             }
         }
 
@@ -208,32 +137,23 @@ public class NuevoDragPrueba: MonoBehaviour {
             }
         }*/
     }
-    public void ClickedCreate () {
+    public void ClickedCreate (GameObject CreatedObject) {
         create = !create;
+
+        if (create == true) {
+            Instantiate (CreatedObject, Vector3.zero, Quaternion.identity);
+            currentState = StateSelector.Move;
+        }
+
     }
 
     public void ClickedEscalar () {
-        if (create == false) {
-            currentState = StateSelector.ObjectSelection;
-            accionCubo = 3;
-        } else if (create == true) {
-            currentState = StateSelector.Scale;
-        }
+        accionCubo = 3;
     }
     public void ClickedRotar () {
-        if (create == false) {
-            currentState = StateSelector.ObjectSelection;
-            accionCubo = 2;
-        } else if (create == true) {
-            currentState = StateSelector.Rotate;
-        }
+        accionCubo = 2;
     }
     public void ClickedMover () {
-        if (create == false) {
-            currentState = StateSelector.ObjectSelection;
-            accionCubo = 1;
-        } else if (create == true) {
-            currentState = StateSelector.Move;
-        }
+        accionCubo = 1;
     }
 }
